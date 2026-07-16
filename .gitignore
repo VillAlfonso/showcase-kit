@@ -1,0 +1,12 @@
+# generated portfolio output
+site/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os
+.DS_Store
+Thumbs.db

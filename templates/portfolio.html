@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+:root{
+  --accent:#6a5cff;
+  --bg:#0e1014; --card:#171a22; --line:#242835; --fg:#e8eaf0; --muted:#98a0b3; --chip:#1f2430;
+  --radius:16px; --maxw:1080px;
+  --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 30px -12px rgba(0,0,0,.6);
+}
+@media (prefers-color-scheme: light){
+  :root{ --bg:#f6f7f9; --card:#fff; --line:#e6e8ee; --fg:#151821; --muted:#5b6376; --chip:#eef1f6;
+  --shadow:0 1px 2px rgba(20,24,40,.06),0 18px 40px -20px rgba(20,24,40,.22); }
+}
+:root[data-theme="dark"]{ --bg:#0e1014; --card:#171a22; --line:#242835; --fg:#e8eaf0; --muted:#98a0b3; --chip:#1f2430; --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 30px -12px rgba(0,0,0,.6); }
+:root[data-theme="light"]{ --bg:#f6f7f9; --card:#fff; --line:#e6e8ee; --fg:#151821; --muted:#5b6376; --chip:#eef1f6; --shadow:0 1px 2px rgba(20,24,40,.06),0 18px 40px -20px rgba(20,24,40,.22); }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--fg); font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
+.top{position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); background:color-mix(in oklab,var(--bg) 82%,transparent); border-bottom:1px solid var(--line)}
+.top .wrap{display:flex; align-items:center; gap:14px; height:60px}
+.brand{font-weight:700; letter-spacing:-.01em; cursor:pointer; background:none; border:0; color:inherit; font-size:16px; padding:0}
+.brand span{color:var(--accent)}
+.spacer{flex:1}
+.tbtn{border:1px solid var(--line); background:var(--card); color:var(--muted); border-radius:10px; padding:7px 11px; font-size:13px; cursor:pointer}
+.tbtn:hover{color:var(--fg)}
+.hero{padding:66px 0 26px}
+.eyebrow{color:var(--accent); font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:12px}
+.hero h1{font-size:clamp(30px,5vw,52px); line-height:1.05; letter-spacing:-.02em; margin:.34em 0 .18em}
+.hero .bio{color:var(--muted); font-size:clamp(15px,2vw,19px); max-width:62ch; margin:0}
+.owner-links{display:flex; gap:10px; flex-wrap:wrap; margin-top:20px}
+.owner-links a{font-size:14px; color:var(--muted); text-decoration:none; border:1px solid var(--line); padding:7px 13px; border-radius:999px}
+.owner-links a:hover{color:var(--fg); border-color:var(--accent)}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; padding:16px 0 72px}
+.card{position:relative; border:1px solid var(--line); background:var(--card); border-radius:var(--radius); overflow:hidden; cursor:pointer; text-align:left; color:inherit; font:inherit; padding:0; box-shadow:var(--shadow); transition:transform .16s ease,border-color .16s ease}
+.card:hover{transform:translateY(-4px); border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.thumb{aspect-ratio:16/9; background:linear-gradient(135deg,color-mix(in oklab,var(--accent) 30%,var(--card)),var(--card)); display:flex; align-items:center; justify-content:center; overflow:hidden}
+.thumb img{width:100%; height:100%; object-fit:cover; display:block}
+.thumb .ph{font-size:32px; color:var(--accent); opacity:.55}
+.card-body{padding:16px 16px 18px}
+.card-body h3{margin:0 0 4px; font-size:18px; letter-spacing:-.01em}
+.card-body .tl{color:var(--muted); font-size:14px; margin:0 0 12px; min-height:2.6em}
+.chips{display:flex; gap:6px; flex-wrap:wrap}
+.chip{font-size:11.5px; color:var(--muted); background:var(--chip); border:1px solid var(--line); padding:3px 8px; border-radius:999px; white-space:nowrap}
+.rowmeta{display:flex; gap:8px; align-items:center; margin-top:12px; color:var(--muted); font-size:12px; text-transform:capitalize}
+.dot{width:6px; height:6px; border-radius:50%; background:var(--accent)}
+.detail{padding:22px 0 84px; animation:fade .25s ease}
+@keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+.back{background:none; border:0; color:var(--muted); cursor:pointer; font:inherit; padding:6px 0; margin-bottom:12px}
+.back:hover{color:var(--fg)}
+.herobanner{aspect-ratio:16/9; border:1px solid var(--line); border-radius:16px; overflow:hidden; margin:0 0 22px; background:#000; box-shadow:var(--shadow)}
+.herobanner video,.herobanner img{width:100%; height:100%; object-fit:cover; display:block}
+.dhead h1{font-size:clamp(26px,4vw,40px); letter-spacing:-.02em; margin:.18em 0 .12em}
+.dhead .tl{color:var(--muted); font-size:18px; margin:0 0 14px; max-width:66ch}
+.madewith{display:inline-flex; align-items:center; gap:7px; font-size:13px; color:var(--muted); border:1px solid var(--line); background:var(--card); padding:6px 12px; border-radius:999px; margin:0 0 18px}
+.madewith b{color:var(--accent); font-weight:600}
+.dlinks{display:flex; gap:10px; flex-wrap:wrap; margin:2px 0 22px}
+.dlinks a{text-decoration:none; font-size:14px; padding:9px 15px; border-radius:10px; border:1px solid var(--line); background:var(--card)}
+.dlinks a.primary{background:var(--accent); color:#fff; border-color:transparent}
+.dlinks a:hover{border-color:var(--accent)}
+.note{border:1px solid color-mix(in oklab,var(--accent) 42%,var(--line)); background:color-mix(in oklab,var(--accent) 10%,var(--card)); border-radius:12px; padding:15px 17px; margin:0 0 28px}
+.note p{margin:0 0 8px}
+.note p:last-child{margin:0}
+.cols{display:grid; grid-template-columns:1fr; gap:34px}
+@media(min-width:820px){ .cols{grid-template-columns:1.55fr .95fr} }
+.sec{margin-bottom:30px}
+.sec h2{font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0 0 12px}
+.sec p{margin:0 0 10px}
+.hl{list-style:none; padding:0; margin:0; display:grid; gap:10px}
+.hl li{padding-left:24px; position:relative}
+.hl li::before{content:"\2192"; position:absolute; left:0; color:var(--accent)}
+.metrics{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:12px}
+.metric{border:1px solid var(--line); background:var(--card); border-radius:12px; padding:14px}
+.metric .v{font-size:22px; font-weight:700; letter-spacing:-.01em}
+.metric .l{font-size:12px; color:var(--muted); margin-top:2px}
+.gallery{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px}
+figure{margin:0}
+figcaption{color:var(--muted); font-size:12.5px; margin-top:7px}
+.gallery video.vid{width:100%; aspect-ratio:16/10; border:1px solid var(--line); border-radius:12px; background:#000; display:block; object-fit:cover}
+.shot{aspect-ratio:16/10; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:linear-gradient(135deg,color-mix(in oklab,var(--accent) 22%,var(--card)),var(--card)); display:flex; align-items:flex-end; position:relative}
+.shot.has{cursor:zoom-in}
+.shot img{width:100%; height:100%; object-fit:cover; display:block}
+.shot .cap{position:relative; z-index:1; padding:10px 12px; font-size:12.5px; color:var(--muted)}
+.shot.has .cap{position:absolute; inset:auto 0 0 0; color:#dfe3ee; background:linear-gradient(transparent,rgba(0,0,0,.55))}
+.lb{position:fixed; inset:0; background:rgba(0,0,0,.86); display:none; align-items:center; justify-content:center; z-index:50; padding:28px; cursor:zoom-out}
+.lb.open{display:flex}
+.lb img{max-width:100%; max-height:100%; border-radius:8px}
+footer{border-top:1px solid var(--line); color:var(--muted); font-size:13px}
+footer .wrap{padding:22px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <button class="brand" onclick="location.hash='#/'">&#9670; <span id="brandName"></span></button>
+  <div class="spacer"></div>
+  <button class="tbtn" id="themeBtn">&#9680; theme</button>
+</div></header>
+<main id="app" class="wrap"></main>
+<div class="lb" id="lb"><img alt=""></div>
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script id="data" type="application/json">{{DATA}}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const OWNER = DATA.owner || {};
+const PROJECTS = (DATA.projects || []).slice().sort((a,b) =>
+  (b.featured?1:0)-(a.featured?1:0) || (b.year||0)-(a.year||0));
+if (OWNER.accent) document.documentElement.style.setProperty('--accent', OWNER.accent);
+document.getElementById('brandName').textContent = OWNER.name || 'Portfolio';
+const bySlug = Object.fromEntries(PROJECTS.map(p => [p.slug, p]));
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function chips(a){return (a||[]).map(t=>`<span class="chip">${esc(t)}</span>`).join('');}
+function isVid(m){return !!m && (m.type==='video' || /\.(webm|mp4|mov|m4v)$/i.test(m.src||''));}
+function heroMedia(p){return (p.media||[]).find(x=>x.role==='hero')||(p.media||[])[0];}
+function posterOf(m){if(!m)return '';return m.type==='image'?(m.src||''):(m.poster||'');}
+function thumb(p){
+  const hm=heroMedia(p); let src=posterOf(hm);
+  if(!src){const im=(p.media||[]).find(x=>x&&x.type==='image'&&x.src); if(im)src=im.src;}
+  if(src)return `<img src="${esc(src)}" alt="${esc((hm&&hm.caption)||p.name)}" onerror="this.remove()">`;
+  return `<span class="ph">&#9670;</span>`;
+}
+function mdish(t){
+  return String(t||'').split(/\n{2,}/).map(b=>b.trim()).filter(Boolean).map(b=>{
+    if(/^[-*] /m.test(b)){
+      const items=b.split(/\n/).map(l=>l.replace(/^[-*] /,'').trim()).filter(Boolean);
+      return '<ul class="hl">'+items.map(i=>`<li>${esc(i)}</li>`).join('')+'</ul>';
+    }
+    return `<p>${esc(b)}</p>`;
+  }).join('');
+}
+
+function landing(){
+  const cards = PROJECTS.map(p=>`
+    <button class="card" onclick="location.hash='#/p/${esc(p.slug)}'">
+      <div class="thumb">${thumb(p)}</div>
+      <div class="card-body">
+        <h3>${esc(p.name)}</h3>
+        <p class="tl">${esc(p.tagline||'')}</p>
+        <div class="chips">${chips((p.tech||[]).slice(0,4))}</div>
+        <div class="rowmeta"><span class="dot"></span>${esc(p.status||'')}${p.year?' &middot; '+p.year:''}</div>
+      </div>
+    </button>`).join('');
+  return `<section class="hero">
+      <div class="eyebrow">${esc(OWNER.role||'Selected work')}</div>
+      <h1>${esc(OWNER.name||'My Projects')}</h1>
+      <p class="bio">${esc(OWNER.bio||'')}</p>
+      ${(OWNER.links&&OWNER.links.length)?`<div class="owner-links">${OWNER.links.map(l=>`<a href="${esc(l.url)}">${esc(l.label)}</a>`).join('')}</div>`:''}
+    </section>
+    <section class="grid">${cards||'<p>No projects yet.</p>'}</section>`;
+}
+
+function detail(p){
+  const hm=heroMedia(p);
+  let banner='';
+  if(hm){
+    if(isVid(hm)) banner=`<div class="herobanner"><video src="${esc(hm.src)}" ${hm.poster?`poster="${esc(hm.poster)}"`:''} controls muted loop playsinline preload="metadata"></video></div>`;
+    else if(hm.src) banner=`<div class="herobanner"><img src="${esc(hm.src)}" alt="${esc(hm.caption||p.name)}"></div>`;
+  }
+  const madewith=p.made_with?`<div class="madewith">Made with <b>${esc(p.made_with)}</b></div>`:'';
+  const note=p.note?`<div class="note">${mdish(p.note)}</div>`:'';
+  const links=(p.links||[]).filter(l=>l.url).map((l,i)=>`<a class="${i===0?'primary':''}" href="${esc(l.url)}">${esc(l.label||l.kind||'Link')}</a>`).join('');
+  const metrics=(p.metrics||[]).map(m=>`<div class="metric"><div class="v">${esc(m.value)}</div><div class="l">${esc(m.label)}</div></div>`).join('');
+  const rest=(p.media||[]).filter(m=>m!==hm);
+  const gallery=rest.map(m=>{
+    if(isVid(m)) return `<figure><video class="vid" src="${esc(m.src)}" ${m.poster?`poster="${esc(m.poster)}"`:''} controls muted loop playsinline preload="metadata"></video>${m.caption?`<figcaption>${esc(m.caption)}</figcaption>`:''}</figure>`;
+    const has=!!m.src;
+    const img=has?`<img src="${esc(m.src)}" alt="${esc(m.caption||'')}" onerror="this.parentNode.classList.remove('has');this.remove()">`:'';
+    const cap=m.caption?`<span class="cap">${esc(m.caption)}</span>`:'';
+    return `<figure><div class="shot ${has?'has':''}" data-full="${esc(m.src||'')}">${img}${cap}</div></figure>`;
+  }).join('');
+  const sections=(p.sections||[]).map(s=>`<div class="sec"><h2>${esc(s.heading)}</h2>${mdish(s.body)}</div>`).join('');
+  const highlights=(p.highlights&&p.highlights.length)?`<div class="sec"><h2>Highlights</h2><ul class="hl">${p.highlights.map(h=>`<li>${esc(h)}</li>`).join('')}</ul></div>`:'';
+  return `<article class="detail">
+    <button class="back" onclick="location.hash='#/'">&#8592; All projects</button>
+    ${banner}
+    <div class="dhead">
+      <div class="eyebrow">${esc(p.status||'')}${p.year?' &middot; '+p.year:''}${p.role?' &middot; '+esc(p.role):''}</div>
+      <h1>${esc(p.name)}</h1>
+      <p class="tl">${esc(p.tagline||'')}</p>
+    </div>
+    ${madewith}
+    ${links?`<div class="dlinks">${links}</div>`:''}
+    ${note}
+    ${gallery?`<div class="sec"><h2>Walkthrough</h2><div class="gallery">${gallery}</div></div>`:''}
+    <div class="cols">
+      <div>
+        ${p.summary?`<div class="sec"><h2>Overview</h2>${mdish(p.summary)}</div>`:''}
+        ${p.problem?`<div class="sec"><h2>The problem</h2>${mdish(p.problem)}</div>`:''}
+        ${sections}
+      </div>
+      <aside>
+        ${highlights}
+        ${(p.tech&&p.tech.length)?`<div class="sec"><h2>Built with</h2><div class="chips">${chips(p.tech)}</div></div>`:''}
+        ${metrics?`<div class="sec"><h2>By the numbers</h2><div class="metrics">${metrics}</div></div>`:''}
+      </aside>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const app=document.getElementById('app');
+  const m=(location.hash||'#/').match(/^#\/p\/(.+)$/);
+  if(m && bySlug[decodeURIComponent(m[1])]){ app.innerHTML=detail(bySlug[decodeURIComponent(m[1])]); wireShots(); }
+  else { app.innerHTML=landing(); }
+  window.scrollTo(0,0);
+}
+function wireShots(){
+  document.querySelectorAll('.shot.has').forEach(s=>{
+    const full=s.getAttribute('data-full'); if(!full) return;
+    s.addEventListener('click',()=>{const lb=document.getElementById('lb'); lb.querySelector('img').src=full; lb.classList.add('open');});
+  });
+}
+document.getElementById('lb').addEventListener('click',e=>e.currentTarget.classList.remove('open'));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.getElementById('lb').classList.remove('open'); });
+const saved=localStorage.getItem('pf-theme'); if(saved) document.documentElement.setAttribute('data-theme',saved);
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const nx=(cur==='light')?'dark':'light';
+  document.documentElement.setAttribute('data-theme',nx); localStorage.setItem('pf-theme',nx);
+});
+document.getElementById('foot').textContent=(OWNER.name?OWNER.name+' · ':'')+'Built with showcase-kit';
+window.addEventListener('hashchange',render);
+render();
+</script>
+</body>
+</html>

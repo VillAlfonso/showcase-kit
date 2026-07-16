@@ -1,0 +1,79 @@
+{
+  "viewport": {"width": 1440, "height": 900},
+  "settle_ms": 1800,
+  "cursor": true,
+  "scroll_el": ".views",
+  "clips": [
+    {"name": "01-hub-brand", "steps": [
+      {"goto": "#/hub"}, {"wait": 1200},
+      {"move": ".hub-card:has-text('Fathom') h3"}, {"wait": 500},
+      {"move": ".hub-card:has-text('Unruly History') h3"}, {"wait": 500},
+      {"click": ".hub-card:has-text('Midnight Menagerie') .chBrand"},
+      {"wait": 2600}, {"shot": true},
+      {"scroll": {"px": 520, "el": ".modal-card"}}, {"wait": 900},
+      {"scroll": {"px": 520, "el": ".modal-card"}}, {"wait": 900},
+      {"scroll": {"px": 520, "el": ".modal-card"}}, {"wait": 1100},
+      {"click": "#mClose"}, {"wait": 800}
+    ]},
+    {"name": "02-autopilot", "steps": [
+      {"goto": "#/hub"}, {"wait": 900},
+      {"click": ".hub-card:has-text('Midnight Menagerie') .chEnter"},
+      {"wait": 2200},
+      {"click": "#apIdea"},
+      {"type": {"selector": "#apIdea", "text": "a cursed painting that survived every fire in victorian london", "delay": 42}},
+      {"wait": 600},
+      {"move": "#apGo"}, {"wait": 1100}, {"shot": true},
+      {"scroll": 560}, {"wait": 1400},
+      {"scroll": 560}, {"wait": 1200}
+    ]},
+    {"name": "03-script-voice", "steps": [
+      {"goto": "#/p/89a7cc9961a9/storyboard"}, {"wait": 1400},
+      {"scroll": 620}, {"wait": 1100}, {"shot": true},
+      {"scroll": 620}, {"wait": 900},
+      {"click": ".nav-item:has-text('2 · Voice')"},
+      {"wait": 2200}, {"shot": "03-voice"},
+      {"scroll": 480}, {"wait": 1200}
+    ]},
+    {"name": "04-images-animate", "steps": [
+      {"goto": "#/p/89a7cc9961a9/images"}, {"wait": 1600},
+      {"scroll": 650}, {"wait": 1000}, {"shot": true},
+      {"scroll": 650}, {"wait": 1000},
+      {"click": ".nav-item:has-text('5 · Animate')"},
+      {"wait": 2200}, {"shot": "04-animate"},
+      {"scroll": 520}, {"wait": 1200}
+    ]},
+    {"name": "05-edit-grammar", "steps": [
+      {"goto": "#/p/89a7cc9961a9/edit"}, {"wait": 2200},
+      {"scroll": 560}, {"wait": 1100}, {"shot": true},
+      {"scroll": 680}, {"wait": 1100},
+      {"scroll": 680}, {"wait": 1200}
+    ]},
+    {"name": "06-preview-play", "steps": [
+      {"goto": "#/p/89a7cc9961a9/preview"}, {"wait": 2000},
+      {"play": ".views video"}, {"wait": 4500}, {"shot": true},
+      {"wait": 5500},
+      {"pause": ".views video"}, {"wait": 500}
+    ]},
+    {"name": "07-publish-youtube", "steps": [
+      {"goto": "#/p/61b473b72123/publish"}, {"wait": 2600},
+      {"scroll": 620}, {"wait": 1200}, {"shot": true},
+      {"scroll": 720}, {"wait": 1600},
+      {"scroll": 720}, {"wait": 1400}
+    ]},
+    {"name": "08-settings-storage", "steps": [
+      {"goto": "#/settings"}, {"wait": 1600},
+      {"scroll": 760}, {"wait": 1000},
+      {"scroll": 760}, {"wait": 1000}, {"shot": true},
+      {"scroll": 860}, {"wait": 900},
+      {"click": "#stScan"}, {"wait": 3200}, {"shot": "08-storage"},
+      {"scroll": 420}, {"wait": 1100}
+    ]},
+    {"name": "09-gatherer-queue", "steps": [
+      {"goto": "#/gatherer"}, {"wait": 2000},
+      {"scroll": 520}, {"wait": 1100}, {"shot": true},
+      {"click": ".nav-item:has-text('Queue')"},
+      {"wait": 1800}, {"shot": "09-queue"},
+      {"wait": 800}
+    ]}
+  ]
+}

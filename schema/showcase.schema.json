@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "showcase.json",
+  "description": "One project's portfolio entry. Every value must be true to the actual code.",
+  "type": "object",
+  "required": ["name", "tagline", "summary", "tech"],
+  "properties": {
+    "slug": { "type": "string", "description": "URL id; auto-derived from name if omitted" },
+    "name": { "type": "string" },
+    "tagline": { "type": "string", "description": "One line, <= ~120 chars" },
+    "summary": { "type": "string", "description": "2-5 sentence overview (markdown ok)" },
+    "problem": { "type": "string", "description": "The problem it solves (markdown ok)" },
+    "made_with": { "type": "string", "description": "Tool / AI / stack the project was built WITH, e.g. 'Claude Fable' (shows as a badge)" },
+    "note": { "type": "string", "description": "A personal note, shown as a callout (markdown ok)" },
+    "role": { "type": "string", "description": "Your role, e.g. 'Solo builder'" },
+    "status": { "type": "string", "enum": ["active", "shipped", "wip", "archived", "experiment"] },
+    "year": { "type": "integer" },
+    "featured": { "type": "boolean" },
+    "tech": { "type": "array", "items": { "type": "string" }, "description": "Only what is actually used" },
+    "topics": { "type": "array", "items": { "type": "string" } },
+    "highlights": { "type": "array", "items": { "type": "string" }, "description": "4-8 genuinely notable things" },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "value"],
+        "properties": { "label": { "type": "string" }, "value": { "type": ["string", "number"] } }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "url"],
+        "properties": {
+          "label": { "type": "string" },
+          "url": { "type": "string" },
+          "kind": { "type": "string", "enum": ["repo", "demo", "docs", "video", "article", "other"] }
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "description": "Screenshots and screen recordings. Exactly one should have role 'hero'.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["image", "video"] },
+          "src": { "type": "string", "description": "Relative path in media/ (.png/.jpg/.mp4/.webm), or '' for a placeholder tile" },
+          "poster": { "type": "string", "description": "For videos: a still frame shown before play (a matching .png)" },
+          "caption": { "type": "string" },
+          "role": { "type": "string", "enum": ["hero", "shot"] }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "description": "Long-form blocks, e.g. 'What it does', 'The hard part'",
+      "items": {
+        "type": "object",
+        "required": ["heading", "body"],
+        "properties": { "heading": { "type": "string" }, "body": { "type": "string", "description": "Markdown: paragraphs and '- ' bullets" } }
+      }
+    },
+    "repo": {
+      "type": "object",
+      "description": "Mechanical facts from probe.py",
+      "properties": {
+        "languages": { "type": "object" },
+        "commits": { "type": "integer" },
+        "first_commit": { "type": "string" },
+        "last_commit": { "type": "string" }
+      }
+    },
+    "generated_at": { "type": "string" },
+    "generated_by": { "type": "string" }
+  }
+}

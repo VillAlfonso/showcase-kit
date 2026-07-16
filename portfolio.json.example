@@ -1,0 +1,12 @@
+{
+  "owner": {
+    "name": "Your Name",
+    "role": "Software Engineer",
+    "bio": "I build things end to end. One or two sentences on what you focus on and what you care about, so a visitor knows who they are looking at.",
+    "accent": "#6a5cff",
+    "links": [
+      {"label": "GitHub", "url": "https://github.com/VillAlfonso"},
+      {"label": "Email", "url": "mailto:you@example.com"}
+    ]
+  }
+}
