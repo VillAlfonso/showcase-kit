@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>showcase-kit — studio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9670;</text></svg>">
+<style>
+:root{--bg:#0d0f14;--panel:#151924;--line:#232a3a;--fg:#e9ebf2;--mut:#96a0b5;--acc:#6a5cff;--green:#5fd08a;--red:#ee6c6c;--mono:ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14.5px/1.55 -apple-system,"Segoe UI",Roboto,sans-serif;
+ background-image:radial-gradient(900px 380px at 14% -4%,rgba(106,92,255,.12),transparent 60%)}
+.wrap{max-width:1120px;margin:0 auto;padding:26px 22px 70px}
+header{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
+h1{font:600 26px ui-serif,Georgia,serif;margin:0}
+h1 b{color:var(--acc)}
+.sub{color:var(--mut);font-size:13px}
+.cols{display:grid;grid-template-columns:340px 1fr;gap:16px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.stt{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:650;margin:0 0 10px}
+.proj{display:flex;justify-content:space-between;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;cursor:pointer}
+.proj:hover,.proj.sel{border-color:var(--acc)}
+.proj b{font-weight:600}
+.proj .m{color:var(--mut);font-size:12px;white-space:nowrap}
+.proj .tl{color:var(--mut);font-size:12px;display:block;margin-top:2px}
+button{background:#1c2130;border:1px solid var(--line);color:var(--fg);border-radius:9px;padding:9px 15px;font:600 13.5px inherit;cursor:pointer}
+button:hover{border-color:var(--acc)}
+button.primary{background:var(--acc);border-color:transparent;color:#fff}
+button:disabled{opacity:.4;cursor:default}
+input[type=text]{width:100%;background:#0a0c10;border:1px solid var(--line);border-radius:9px;color:var(--fg);padding:9px 12px;font:13px var(--mono)}
+input[type=text]:focus{outline:none;border-color:var(--acc)}
+textarea{width:100%;height:430px;background:#0a0c10;border:1px solid var(--line);border-radius:10px;color:#c9d1e3;padding:12px;font:12.5px/1.6 var(--mono);resize:vertical}
+textarea:focus{outline:none;border-color:var(--acc)}
+#log{background:#07090c;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font:12px/1.6 var(--mono);height:150px;overflow-y:auto;white-space:pre-wrap;color:#aeb6c8;display:none;margin-top:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msg{font-size:13px;margin-left:6px}
+.ok{color:var(--green)}.bad{color:var(--red)}
+label.chk{color:var(--mut);font-size:13px;display:flex;gap:6px;align-items:center;cursor:pointer}
+a.site{color:var(--acc)}
+.facts{font:12.5px/1.8 var(--mono);color:var(--mut)}
+.facts b{color:var(--fg)}
+</style>
+</head>
+<body><div class="wrap">
+<header><h1>&#9670; <b>showcase-kit</b> studio</h1><span class="sub">probe a repo · edit entries · build the portfolio</span></header>
+
+<div class="panel">
+  <p class="stt">Build the portfolio</p>
+  <div class="row">
+    <button class="primary" onclick="build(false)">Build site</button>
+    <label class="chk"><input type="checkbox" id="inline"> inline media (one huge html)</label>
+    <a class="site" id="siteLink" href="/site/" target="_blank" style="display:none">Open the built site &rarr;</a>
+    <span class="msg" id="buildMsg"></span>
+  </div>
+  <div id="log"></div>
+</div>
+
+<div class="cols">
+  <div>
+    <div class="panel">
+      <p class="stt">Projects</p>
+      <div id="plist"></div>
+    </div>
+    <div class="panel">
+      <p class="stt">Probe a codebase</p>
+      <input type="text" id="probePath" placeholder="C:\path\to\repo" spellcheck="false">
+      <div class="row" style="margin-top:10px">
+        <button onclick="probe()">Probe</button>
+        <span class="msg" id="probeMsg"></span>
+      </div>
+      <div class="facts" id="probeOut" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <p class="stt">showcase.json — <span id="editSlug">select a project</span></p>
+    <textarea id="editor" spellcheck="false" placeholder="Pick a project on the left."></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="primary" onclick="save()">Validate + save</button>
+      <span class="msg" id="saveMsg"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let cur=null,poll=null;
+
+async function refresh(){
+  const d=await (await fetch("/api/projects")).json();
+  $("plist").innerHTML=d.projects.map(p=>`
+    <div class="proj ${p.slug===cur?'sel':''}" onclick="openP('${p.slug}')">
+      <div><b>${p.name}</b>${p.featured?' ★':''}<span class="tl">${p.tagline||''}</span></div>
+      <span class="m">${p.media} media<br>${p.media_files} files</span>
+    </div>`).join("")||'<span class="sub">none yet — probe a repo, then create examples/&lt;slug&gt;/showcase.json</span>';
+  $("siteLink").style.display=d.site_built?"inline":"none";
+}
+async function openP(slug){
+  cur=slug;
+  const d=await (await fetch("/api/project/"+slug)).json();
+  $("editor").value=d.content;$("editSlug").textContent=slug;$("saveMsg").textContent="";
+  refresh();
+}
+async function save(){
+  if(!cur){$("saveMsg").innerHTML='<span class="bad">pick a project first</span>';return}
+  const r=await fetch("/api/project/"+cur,{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({content:$("editor").value})});
+  const j=await r.json();
+  $("saveMsg").innerHTML=j.ok?'<span class="ok">saved ✓</span>':`<span class="bad">${j.err}</span>`;
+}
+async function build(){
+  const r=await fetch("/api/build",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({inline:$("inline").checked})});
+  const j=await r.json();
+  if(j.err){$("buildMsg").innerHTML=`<span class="bad">${j.err}</span>`;return}
+  $("log").style.display="block";$("buildMsg").textContent="";watch("buildMsg");
+}
+async function probe(){
+  const r=await fetch("/api/probe",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({path:$("probePath").value.trim()})});
+  const j=await r.json();
+  if(j.err){$("probeMsg").innerHTML=`<span class="bad">${j.err}</span>`;return}
+  $("log").style.display="block";watch("probeMsg",showProbe);
+}
+function watch(msgId,onDone){
+  if(poll)clearInterval(poll);
+  poll=setInterval(async()=>{
+    const s=await (await fetch("/api/job")).json();
+    $("log").textContent=s.log.join("\n");$("log").scrollTop=1e9;
+    if(s.state!=="running"){clearInterval(poll);poll=null;
+      $(msgId).innerHTML=s.state==="done"?'<span class="ok">done ✓</span>':'<span class="bad">failed — see log</span>';
+      refresh();if(onDone&&s.state==="done")onDone(s);}
+  },800);
+}
+function showProbe(s){
+  try{
+    const txt=s.log.join("\n"),i=txt.indexOf("{");
+    const d=JSON.parse(txt.slice(i));
+    const langs=(d.languages?.by_language||[]).slice(0,4).map(l=>`${l.language} ${l.pct}%`).join(" · ");
+    $("probeOut").innerHTML=
+      `<div><b>${d.name_guess||"?"}</b> — ${d.project_type||"?"}</div>`+
+      `<div>LOC <b>${(d.languages?.code_lines||0).toLocaleString()}</b> · files <b>${d.languages?.total_files||"?"}</b> · routes <b>${(d.routes||[]).length}</b> · commits <b>${d.git?.commits||"—"}</b></div>`+
+      `<div>${langs}</div>`;
+  }catch(e){$("probeOut").textContent="(probe output in the log above)"}
+}
+refresh();
+</script>
+</div></body>
+</html>

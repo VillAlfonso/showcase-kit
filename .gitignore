@@ -10,3 +10,4 @@ venv/
 # os
 .DS_Store
 Thumbs.db
+.probe-cache.json
